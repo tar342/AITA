@@ -44,6 +44,8 @@ pip install -r requirements.txt
 
 # Usage
 
+```sh
 export FLASK_APP=app.py          # On Windows: set FLASK_APP=app.py
 export FLASK_ENV=development     # On Windows: set 
 flask run
+```
