@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Am I the Asshole? (Corporate Edition)</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    textarea, input, select { width: 100%; margin-top: 10px; padding: 8px; }
+    .result-box { margin-top: 30px; white-space: pre-wrap; background: #f4f4f4; padding: 20px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>🏢 Am I the Asshole? (Corporate Edition)</h1>
+  <form method="post">
+    <label>Email Thread:</label>
+    <textarea name="thread" rows="10" placeholder="Paste the email thread here...">{{ request.form.thread or '' }}</textarea>
+
+    <label>Your Role:</label>
+    <input name="user_role" value="{{ request.form.user_role or 'Associate' }}">
+
+    <label>Coworker's Role:</label>
+    <input name="coworker_role" value="{{ request.form.coworker_role or 'Manager' }}">
+
+    <label>Relationship:</label>
+    <select name="relationship">
+      {% for rel in ['peer', 'supervisor', 'direct report'] %}
+        <option value="{{ rel }}" {% if request.form.relationship == rel %}selected{% endif %}>{{ rel }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" style="margin-top: 20px;">Analyze</button>
+  </form>
+
+  {% if error %}
+    <p style="color:red;">⚠️ {{ error }}</p>
+  {% endif %}
+
+  {% if result %}
+    <div class="result-box">
+      <h2>📝 Summary:</h2>
+      {{ result.summary }}
+
+      <h3>🔎 Tone:</h3>
+      User: {{ result.user_tone }}<br>
+      Coworker: {{ result.coworker_tone }}
+
+      <h3>⚖️ Verdict:</h3>
+      <strong>{{ result.verdict }}</strong><br>
+      Confidence: {{ result.confidence }}
+
+      <h3>🚩 Flagged Phrases:</h3>
+      <ul>
+        {% for phrase in result.flagged_phrases %}
+          <li>{{ phrase }}</li>
+        {% endfor %}
+      </ul>
+
+      <h3>✏️ Suggested Rewrite:</h3>
+      {{ result.suggestion }}
+    </div>
+  {% endif %}
+</body>
+</html>
