@@ -44,9 +44,6 @@ pip install -r requirements.txt
 
 ## Usage
 
-Play a game of rock, paper scissors:
-
-```sh
-# only works if this file does NOT import from other local py files:
-python app.py
-
+export FLASK_APP=app.py          # On Windows: set FLASK_APP=app.py
+export FLASK_ENV=development     # On Windows: set 
+flask run
