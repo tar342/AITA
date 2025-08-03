@@ -24,6 +24,29 @@ This is a Flask-based web app that uses OpenAI's GPT API to analyze workplace em
 
 If you downloaded the ZIP, unzip it and navigate to the project folder:
 
-```bash
-unzip aita-corp.zip
-cd aita-corp
+## Setup
+
+Create and activate a virtual environment:
+
+```sh
+conda create -n aita-env python=3.11
+
+conda activate aita-env
+```
+
+Install packages:
+
+```sh
+# pip install pytest
+
+pip install -r requirements.txt
+```
+
+## Usage
+
+Play a game of rock, paper scissors:
+
+```sh
+# only works if this file does NOT import from other local py files:
+python app.py
+
