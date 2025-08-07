@@ -36,7 +36,6 @@ conda activate aita-env
 Install packages:
 
 ```sh
-# pip install pytest
 pip install -r requirements.txt
 ```
 # Usage
