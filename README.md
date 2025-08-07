@@ -30,7 +30,6 @@ Create and activate a virtual environment:
 
 ```sh
 conda create -n aita-env python=3.11
-
 conda activate aita-env
 ```
 
@@ -38,14 +37,12 @@ Install packages:
 
 ```sh
 # pip install pytest
-
 pip install -r requirements.txt
 ```
-
 # Usage
 
 ```sh
-export FLASK_APP=app.py          # On Windows: set FLASK_APP=app.py
-export FLASK_ENV=development     # On Windows: set 
+export FLASK_APP=app.py          
+export FLASK_ENV=development     
 flask run
 ```
