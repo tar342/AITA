@@ -9,18 +9,18 @@ def index():
     error = None
 
     if request.method == "POST":
-        thread = request.form.get("thread", "")
-        user_role = request.form.get("user_role", "Associate")
-        coworker_role = request.form.get("coworker_role", "Manager")
-        relationship = request.form.get("relationship", "peer")
-        tone_level = request.form.get("tone_level", "5")  # NEW
-
-        if not thread.strip():
+        thread_input = request.form.get("thread_input", "")
+        sender_role_input = request.form.get("sender_role_input", "Associate")
+        recipient_role_input = request.form.get("recipient_role_input", "Manager")
+        relationship_input = request.form.get("relationship_input", "peer")
+        tone_level = request.form.get("tone_level", "5")
+        sender_name_input = request.form.get("sender_name_input", "John Doe")
+        if not thread_input.strip():
             error = "Please enter an email thread."
         else:
             try:
                 result = analyze_email_thread(
-                    thread, user_role, coworker_role, relationship, tone_level
+                    thread_input, sender_role_input, recipient_role_input, relationship_input, tone_level, sender_name_input,
                 )
             except Exception as e:
                 error = str(e)

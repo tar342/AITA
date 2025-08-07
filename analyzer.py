@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def analyze_email_thread(thread, user_role, coworker_role, relationship, tone_level):
+def analyze_email_thread(thread_input, sender_name_input, sender_role_input, recipient_role_input, relationship_input, tone_level):
     # Map slider value to tone description
     tone_map = {
         "1": "very soft and diplomatic",
@@ -28,20 +28,21 @@ You are an impartial HR consultant analyzing workplace communication in a U.S.-b
 
 Evaluate the email thread below and return a JSON with:
 - summary: A brief neutral summary of what happened.
-- user_tone: Label the user's tone (e.g., aggressive, passive-aggressive, professional, neutral, frustrated).
-- coworker_tone: Label the coworker’s tone.
-- verdict: Who is at fault? (User, Coworker, or Both)
+- sender_tone: Label the Sender's tone (e.g., aggressive, passive-aggressive, professional, neutral, frustrated). Use the Sender name to determine who the sender is.
+- recipient_tone: Label the Recipient’s tone. 
+- verdict: Who is at fault? (Sender, Recipient, or Both. Use the Sender name to dermine who the Sender is)
 - confidence: On a scale of 1-10, how confident are you in your verdict?
-- flagged_phrases: Any phrases from the user that may be unprofessional or inflammatory.
-- suggestion: Rewrite the user’s original email in a more {tone_description} tone.
+- flagged_phrases: Any phrases from the sender that may be unprofessional or inflammatory.
+- suggestion: Rewrite the emails in a more {tone_description} tone.
 
 Assume:
-- User role: {user_role}
-- Coworker role: {coworker_role}
-- Relationship: {relationship}
+- Sender role: {sender_role_input}
+- Sender name: {sender_name_input}
+- Recipient role: {recipient_role_input}
+- Relationship of Reciepient to Sender: {relationship_input}
 
 Thread:
-{thread}
+{thread_input}
 """
 
     response = openai.ChatCompletion.create(
