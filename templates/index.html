@@ -1,24 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Am I the Asshole? (Corporate Edition)</title>
   <style>
-    body { font-family: Arial; margin: 40px; }
-    textarea, input, select { width: 100%; margin-top: 10px; padding: 8px; }
-    .result-box { margin-top: 30px; white-space: pre-wrap; background: #f4f4f4; padding: 20px; border-radius: 6px; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 40px auto;
+      max-width: 800px;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    textarea, input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result-box {
+      margin-top: 40px;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      white-space: pre-wrap;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .tone-slider-container {
+      margin-top: 20px;
+    }
+
+    .tone-slider-wrapper {
+      width: 300px;
+    }
+
+    .slider-label {
+      font-weight: bold;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 6px;
+    }
   </style>
 </head>
 <body>
-  <h1>🏢 Am I the Asshole? (Corporate Edition)</h1>
+  <h1>Am I the Asshole? (Corporate Edition)</h1>
+
+  <div style="background:#fff; padding:20px; border-radius:10px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); margin-bottom:30px;">
+    <h2>How It Works</h2>
+    <p>This tool helps you analyze email threads with coworkers to determine if your tone, content, or phrasing may come across as inappropriate or problematic in a workplace context.</p>
+    
+    <h3>What to Enter:</h3>
+    <ul>
+      <li><strong>Email Thread:</strong> Paste the full email conversation (including both you and your coworker).</li>
+      <li><strong>Your Role:</strong> Your position in the company (e.g., Associate, Engineer, Director).</li>
+      <li><strong>Coworker's Role:</strong> The other person’s position (e.g., Manager, Peer, VP).</li>
+      <li><strong>Relationship:</strong> Choose if they are your peer, supervisor, or direct report.</li>
+      <li><strong>Tone Preference:</strong> Select how direct or gentle you want the AI's suggested rewrite to be (1 = soft, 10 = very direct).</li>
+    </ul>
+
+    <h3>What You’ll Get:</h3>
+    <ul>
+      <li><strong>Summary:</strong> A neutral summary of the exchange.</li>
+      <li><strong>Tone:</strong> Detected tone of you and your coworker (e.g., polite, passive-aggressive).</li>
+      <li><strong>Verdict:</strong> A judgment on who, if anyone, is at fault — you, your coworker, or both.</li>
+      <li><strong>Confidence:</strong> How sure the AI is about its verdict.</li>
+      <li><strong>Flagged Phrases:</strong> Specific words/phrases that might be problematic.</li>
+      <li><strong>Suggested Rewrite:</strong> A more professional version of your message.</li>
+    </ul>
+  </div>
+
+
   <form method="post">
     <label>Email Thread:</label>
     <textarea name="thread" rows="10" placeholder="Paste the email thread here...">{{ request.form.thread or '' }}</textarea>
 
     <label>Your Role:</label>
-    <input name="user_role" value="{{ request.form.user_role or 'Associate' }}">
+    <input type="text" name="user_role" value="{{ request.form.user_role or 'Associate' }}">
 
     <label>Coworker's Role:</label>
-    <input name="coworker_role" value="{{ request.form.coworker_role or 'Manager' }}">
+    <input type="text" name="coworker_role" value="{{ request.form.coworker_role or 'Manager' }}">
 
     <label>Relationship:</label>
     <select name="relationship">
@@ -27,34 +137,47 @@
       {% endfor %}
     </select>
 
-    <button type="submit" style="margin-top: 20px;">Analyze</button>
+    <div class="tone-slider-container">
+      <label class="slider-label" for="tone_level">Preferred Rewrite Tone (1 = soft, 10 = very direct):</label>
+      <div class="tone-slider-wrapper">
+        <input type="range" min="1" max="10" step="1" value="{{ request.form.tone_level or '5' }}"
+               name="tone_level" id="tone_level" style="width: 100%;">
+        <div class="slider-labels">
+          {% for i in range(1, 11) %}
+            <span>{{ i }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <button type="submit">Analyze</button>
   </form>
 
   {% if error %}
-    <p style="color:red;">⚠️ {{ error }}</p>
+    <div class="error">⚠️ {{ error }}</div>
   {% endif %}
 
   {% if result %}
     <div class="result-box">
-      <h2>📝 Summary:</h2>
+      <h2>Summary:</h2>
       {{ result.summary }}
 
-      <h3>🔎 Tone:</h3>
+      <h3>Tone:</h3>
       User: {{ result.user_tone }}<br>
       Coworker: {{ result.coworker_tone }}
 
-      <h3>⚖️ Verdict:</h3>
+      <h3>Verdict:</h3>
       <strong>{{ result.verdict }}</strong><br>
       Confidence: {{ result.confidence }}
 
-      <h3>🚩 Flagged Phrases:</h3>
+      <h3>Flagged Phrases:</h3>
       <ul>
         {% for phrase in result.flagged_phrases %}
           <li>{{ phrase }}</li>
         {% endfor %}
       </ul>
 
-      <h3>✏️ Suggested Rewrite:</h3>
+      <h3>Suggested Rewrite:</h3>
       {{ result.suggestion }}
     </div>
   {% endif %}
