@@ -102,7 +102,6 @@
     <h3>What to Enter:</h3>
     <ul>
       <li><strong>Email Thread:</strong> Paste the full email conversation (including both the sender and the recipient).</li>
-      <li><strong>Sender Name:</strong> Sender name (e.g., Bob).</li>
       <li><strong>Sender Role:</strong> Sender position in the company (e.g., Associate, Engineer, Director).</li>
       <li><strong>Recipient's Role:</strong> Recipient’s position (e.g., Manager, Peer, VP).</li>
       <li><strong>Relationship:</strong> Choose if the Recipient is a peer, supervisor, or direct report.</li>
@@ -124,9 +123,6 @@
   <form method="post">
     <label>Email Thread:</label>
     <textarea name="thread_input" rows="10" placeholder="Paste the email thread here...">{{ request.form.thread_input or 'Bob: can you give me some help with this project? Amy: not now! i need to leave! do your own work!' }}</textarea>
-
-    <label>Sender Name:</label>
-    <input type="text" name="sender_name_input" value="{{ request.form.sender_name_input or 'Bob' }}">
 
     <label>Sender Role:</label>
     <input type="text" name="sender_role_input" value="{{ request.form.sender_role_input or 'Associate' }}">
